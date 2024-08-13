@@ -27,13 +27,13 @@ En este proyecto, se construirá un modelo predictivo para estimar la superviven
     
   </tr>
   <tr>
-    <th> fghj </th>
-    <th> fghj </th>
+    <th> Samuel Peláez Alemán </th>
+    <th> A01026093 </th>
     
   </tr>
     <tr>
-    <th>gh  </th>
-    <th> sdfgh </th>
+    <th>Diego Loyo  </th>
+    <th> A01571200 </th>
     
   </tr>
   </table>
