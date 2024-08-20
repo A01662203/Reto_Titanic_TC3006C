@@ -1,18 +1,11 @@
-from scripts.data_loading import load_data
-from scripts.data_cleaning import data_cleaning, missing_data
-from scripts.data_transformation import data_transformation
+from reto_limpieza.cleaning_df import cleaning_df
 
 def main():
-    # Load the dataframes
-    df_train, df_test = load_data()
-    
-    # Clean the dataframes 
-    df_train, df_test = data_cleaning(df_train, df_test)
+    # PARTE 1: Limpieza de los datos
+    df_train, df_test = cleaning_df()
 
-    # Transform the dataframes
-    df_train, df_test = data_transformation(df_train, df_test)
-
-    missing_data(df_train, df_test)
+    #PARTE 2: Modelado de los datos
+    #modeling()
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,6 @@
 import pandas as pd
 
-def load_data():
+def data_loading():
     # Open test.csv and count the number of rows
     df_test = pd.read_csv('./data/test.csv')
     # print(df_test.shape[0])
