@@ -1,4 +1,3 @@
-import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -59,9 +58,20 @@ def plt_survival_rate(df_train):
     plt.tight_layout()
     plt.show()
 
+def drop_last_cols(df_train, df_test):
+    # Drop columns that are not needed for the analysis
+    df_train = df_train.drop(columns=['Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length'])
+    df_test = df_test.drop(columns=['Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length'])
+
+    return df_train, df_test
+
 def data_exploration(df_train, df_test):
     survival_analysis(df_train)
 
     plt_group_size(df_train)
 
     plt_survival_rate(df_train)
+
+    df_train, df_test = drop_last_cols(df_train, df_test)
+
+    return df_train, df_test

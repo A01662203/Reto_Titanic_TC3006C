@@ -4,16 +4,16 @@ from reto_limpieza.scripts.data_transformation import data_transformation
 from reto_limpieza.scripts.data_exploration import data_exploration
 
 def cleaning_df():
-    # Load the dataframes
+    # Cargar los dataframes de sus respectivos archivos csv
     df_train, df_test = data_loading()
     
-    # Clean the dataframes 
+    # Análisis de datos faltantes y eliminación de columnas y filas por dicho motivo
     df_train, df_test = data_cleaning(df_train, df_test)
 
-    # Transform the dataframes
+    # Completado de edades faltantes, creación de columna 'Group_Size',  'AgeGroup' y 'AgeGroupSex', y separación de la columna 'Ticket'
     df_train, df_test = data_transformation(df_train, df_test)
 
-    # Explore the dataframes
-    data_exploration(df_train, df_test)
+    # Análisis de sobrevivientes y creación de gráficos
+    df_train, df_test = data_exploration(df_train, df_test)
 
     return df_train, df_test
