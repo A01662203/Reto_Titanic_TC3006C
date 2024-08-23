@@ -1,20 +1,20 @@
 def missing_data(df_train, df_test):
-    # Get missing percentage per column in df_train
+    # Calcular el porcentaje de valores faltantes por columna en datos de entrenamiento
     missing_values = df_train.isnull().mean() * 100
     print(missing_values)
     print('*'*50)
 
-    # Get missing percentage per column in df_test
+    # Calcular el porcentaje de valores faltantes por columna en datos de prueba
     missing_values_test = df_test.isnull().mean() * 100
     print(missing_values_test)
 
-# Erase columns PassengerId and Cabin
+# Eliminar las columnas 'PassengerId' y 'Cabin' de ambos conjuntos de datos
 def drop_columns(df_train, df_test):
     df_train = df_train.drop(columns=['PassengerId', 'Cabin'])
     df_test = df_test.drop(columns=['PassengerId', 'Cabin'])
     return df_train, df_test
 
-# Erase rows from Embarked of df_train and Fare of df_test with missing values, and print me the amount of rows erased in each case
+# Eliminar las filas con valores faltantes en las columnas 'Embarked' y 'Fare'
 def drop_rows(df_train, df_test):
     train_rows = len(df_train)
     test_rows = len(df_test)
@@ -26,9 +26,8 @@ def drop_rows(df_train, df_test):
 
     return df_train, df_test
 
+# Limpieza de datos en ambos conjuntos de datos basada en las funciones anteriores
 def data_cleaning(df_train, df_test):
-    # survival_analysis()
-
     missing_data(df_train, df_test)
 
     df_train, df_test = drop_columns(df_train, df_test)

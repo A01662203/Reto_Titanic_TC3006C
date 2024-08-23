@@ -1,70 +1,79 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+# Función para realizar un análisis de supervivencia
 def survival_analysis(df_train):
-    # Print amount of survived and not survived passengers
-    # Print the amount of passengers that survived and not survived
+    # Imprimir el total de pasajeros que sobrevivieron y no sobrevivieron
     survival_counts = df_train.groupby('Survived').size()
     print(f'Total de pasajeros que sobrevivieron: {survival_counts[1]} | Total de pasajeros que no sobrevivieron: {survival_counts[0]}')
     print('*'*40)
 
-    # Filter the dataset to include only men
+    # Filtrar la supervivencia de los pasajeros masculinos 
     men = df_train[df_train['Sex'] == 'male']
-    # Group by 'Survived' and count the number of men who survived and not survived
     men_survival_counts = men.groupby('Survived').size()
     print(f'Pasajeros hombres que sobreviveron: {men_survival_counts[1]} | Pasajeros hombres que no sobrevivieron: {men_survival_counts[0]}')
     print('*'*40)
+
+    # Filtrar la supervivencia de los pasajeros femeninos
     female = df_train[df_train['Sex'] == 'female']
     female_survival_counts = female.groupby('Survived').size()
     print(f'Pasajeros mujeres que sobrevivieron: {female_survival_counts[1]} | Pasajeros mujeres que no sobrevivieron: {female_survival_counts[0]}')
 
+# Función para graficar la distribución de la supervivencia por tamaño de grupo familiar
 def plt_group_size(df_train):
-    # Create a figure and axis
+    # Creación de la figura
     plt.figure(figsize=(10, 6))
 
-    # Plot a histogram for the 'Survived' column grouped by 'Group_Size', order by alone, small, medium, large, give space between bars
+    # Graficar la distribución de la supervivencia por tamaño de grupo familiar
     sns.countplot(data=df_train, x='Group_Size', hue='Survived', order=['ALONE', 'SMALL', 'MEDIUM', 'LARGE'], dodge=True)
 
-
-    # Set the title and labels
+    # Definición de los títulos y etiquetas de los ejes
     plt.title('Survival Distribution by Family Group Size')
     plt.xlabel('Family Group Size')
     plt.ylabel('Count')
     plt.legend(['Not Survived', 'Survived'])
 
-    # Show the plot
+    # Mostrar la gráfica
     plt.show()
 
+# Función para graficar la tasa de supervivencia por características de los pasajeros
 def plt_survival_rate(df_train):
-    # Make a subplot of every column in df_train as index for the pivot table ordered by the survival rate
+    # Hacer una gráfica de barras para cada columna en los datos de entrenaminto como índice de la tabla pivote ordenada por la tasa de supervivencia
     df_train_analisis = df_train.drop(columns=['Name', 'Age', 'Survived', 'Fare', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'AgeGroup', 'Group_Size', 'Ticket', 'Title', 'Ticket_Number', 'Ticket_Length'])
     fig, axs = plt.subplots(2, 3, figsize=(15, 10))
     fig.suptitle('Survival Rate characteristics of Male passengers')
 
+    # Iterar sobre cada columna en los datos de entrenamiento
     for i, col in enumerate(df_train_analisis.columns):
-        # Create pivot table with counts for each survival status
+        # Crear una tabla pivote con la columna actual
         pivot = df_train.pivot_table(index=col, columns='Survived', aggfunc='size', fill_value=0)
-        # Calculate the survival rate
+
+        # Calcular la tasa de supervivencia
         pivot['Survival Rate'] = pivot[1] / (pivot[0] + pivot[1])
-        # Order the pivot table by the Survival Rate in ascending order
+
+        # Ordenar la tabla pivote por la tasa de supervivencia
         pivot = pivot.sort_values(by='Survival Rate', ascending=True)
-        # Plot the Survival Rate
+
+        # Graficar la tasa de supervivencia
         pivot['Survival Rate'].plot(kind='bar', ax=axs[i//3, i%3], color='skyblue')
         axs[i//3, i%3].set_title(f'Survival Rate by {col}')
         axs[i//3, i%3].set_ylabel('Survival Rate')
         axs[i//3, i%3].set_ylim(0, 1)
         axs[i//3, i%3].grid(axis='y', linestyle='--', alpha=0.6)
 
+    # Ajustar el espacio entre las gráficas y mostrar la figura
     plt.tight_layout()
     plt.show()
 
+# Función para eliminar las columnas que ya no son necesarias para la parte del modelado
 def drop_last_cols(df_train, df_test):
-    # Drop columns that are not needed for the analysis
-    df_train = df_train.drop(columns=['Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length'])
-    df_test = df_test.drop(columns=['Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length'])
+    # Eliminar las columnas 'Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length' y 'Title' de ambos conjuntos de datos
+    df_train = df_train.drop(columns=['Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length', 'Title'])
+    df_test = df_test.drop(columns=['Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length', 'Title'])
 
     return df_train, df_test
 
+# Función para realizar la exploración de los datos, que incluye análisis, gráficas y eliminación de columnas innecesarias para el modelado
 def data_exploration(df_train, df_test):
     survival_analysis(df_train)
 
