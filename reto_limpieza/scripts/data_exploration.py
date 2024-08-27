@@ -120,6 +120,33 @@ def age_group_sex_tranformation(df_train, df_test):
 
     return df_train, df_test
 
+def remove_zero_rows(df_train, df_test):
+    # Definir las columnas de AgeGroup_Sex
+    age_group_sex_columns = [
+        'AgeGroup_Sex_0', 'AgeGroup_Sex_1', 'AgeGroup_Sex_2', 'AgeGroup_Sex_3', 'AgeGroup_Sex_4',
+        'AgeGroup_Sex_5', 'AgeGroup_Sex_6', 'AgeGroup_Sex_7', 'AgeGroup_Sex_8', 'AgeGroup_Sex_9',
+        'AgeGroup_Sex_10', 'AgeGroup_Sex_11', 'AgeGroup_Sex_12', 'AgeGroup_Sex_13', 'AgeGroup_Sex_14',
+        'AgeGroup_Sex_15', 'AgeGroup_Sex_16', 'AgeGroup_Sex_17', 'AgeGroup_Sex_18', 'AgeGroup_Sex_19',
+        'AgeGroup_Sex_20', 'AgeGroup_Sex_21', 'AgeGroup_Sex_22', 'AgeGroup_Sex_23', 'AgeGroup_Sex_24',
+        'AgeGroup_Sex_25', 'AgeGroup_Sex_26', 'AgeGroup_Sex_27', 'AgeGroup_Sex_28'
+    ]
+
+    # Eliminar filas en df_train
+    initial_train_rows = len(df_train)
+    df_train = df_train[~(df_train[age_group_sex_columns] == 0).all(axis=1)]
+    removed_train_rows = initial_train_rows - len(df_train)
+
+    # Eliminar filas en df_test
+    initial_test_rows = len(df_test)
+    df_test = df_test[~(df_test[age_group_sex_columns] == 0).all(axis=1)]
+    removed_test_rows = initial_test_rows - len(df_test)
+
+    # Imprimir el total de filas eliminadas
+    print(f"Total de filas eliminadas en train: {removed_train_rows}")
+    print(f"Total de filas eliminadas en test: {removed_test_rows}")
+
+    return df_train, df_test
+
 # Función para realizar la exploración de los datos, que incluye análisis, gráficas y eliminación de columnas innecesarias para el modelado
 def data_exploration(df_train, df_test):
     survival_analysis(df_train)
@@ -135,5 +162,7 @@ def data_exploration(df_train, df_test):
     df_train, df_test = age_group_sex_tranformation(df_train, df_test)
 
     df_train, df_test = drop_last_cols(df_train, df_test)
+
+    df_train, df_test = remove_zero_rows(df_train, df_test)
 
     return df_train, df_test
