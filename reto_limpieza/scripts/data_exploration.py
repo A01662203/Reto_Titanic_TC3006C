@@ -70,8 +70,8 @@ def plt_survival_rate(df_train):
 # Función para eliminar las columnas que ya no son necesarias para la parte del modelado
 def drop_last_cols(df_train, df_test):
     # Eliminar las columnas 'Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length' y 'Title' de ambos conjuntos de datos
-    df_train = df_train.drop(columns=['Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'Sex', 'Age', 'Fare', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'Parch', 'SibSp'])
-    df_test = df_test.drop(columns=['Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'Sex', 'Age', 'Fare', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'Parch', 'SibSp'])
+    df_train = df_train.drop(columns=['Ticket', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'Fare', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'Parch', 'SibSp'])
+    df_test = df_test.drop(columns=['Ticket', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'Fare', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'Parch', 'SibSp'])
 
     return df_train, df_test
 
@@ -103,47 +103,20 @@ def group_size_tranformation(df_train, df_test):
 
     return df_train, df_test
 
-def age_group_sex_tranformation(df_train, df_test):
-    ohe = OneHotEncoder(handle_unknown='ignore')
+def sex_tranformation(df_train, df_test):
+    ohe = OneHotEncoder()
 
     # Fit on df_train and transform both df_train and df_test
-    X_train = ohe.fit_transform(df_train[['AgeGroup_Sex']]).toarray()
-    X_test = ohe.transform(df_test[['AgeGroup_Sex']]).toarray()
+    X_train = ohe.fit_transform(df_train[['Sex']]).toarray()
+    X_test = ohe.transform(df_test[['Sex']]).toarray()
 
     # Create DataFrames for the transformed data
-    df_train_ohe = pd.DataFrame(X_train, columns=["AgeGroup_Sex_" + str(i) for i in range(X_train.shape[1])])
-    df_test_ohe = pd.DataFrame(X_test, columns=["AgeGroup_Sex_" + str(i) for i in range(X_test.shape[1])])
+    df_train_ohe = pd.DataFrame(X_train, columns=["Sex_" + str(i) for i in range(X_train.shape[1])])
+    df_test_ohe = pd.DataFrame(X_test, columns=["Sex_" + str(i) for i in range(X_test.shape[1])])
 
     # Concatenate the one-hot encoded columns back to the original DataFrames
-    df_train = pd.concat([df_train.reset_index(drop=True), df_train_ohe], axis=1).drop(columns=['AgeGroup_Sex'])
-    df_test = pd.concat([df_test.reset_index(drop=True), df_test_ohe], axis=1).drop(columns=['AgeGroup_Sex'])
-
-    return df_train, df_test
-
-def remove_zero_rows(df_train, df_test):
-    # Definir las columnas de AgeGroup_Sex
-    age_group_sex_columns = [
-        'AgeGroup_Sex_0', 'AgeGroup_Sex_1', 'AgeGroup_Sex_2', 'AgeGroup_Sex_3', 'AgeGroup_Sex_4',
-        'AgeGroup_Sex_5', 'AgeGroup_Sex_6', 'AgeGroup_Sex_7', 'AgeGroup_Sex_8', 'AgeGroup_Sex_9',
-        'AgeGroup_Sex_10', 'AgeGroup_Sex_11', 'AgeGroup_Sex_12', 'AgeGroup_Sex_13', 'AgeGroup_Sex_14',
-        'AgeGroup_Sex_15', 'AgeGroup_Sex_16', 'AgeGroup_Sex_17', 'AgeGroup_Sex_18', 'AgeGroup_Sex_19',
-        'AgeGroup_Sex_20', 'AgeGroup_Sex_21', 'AgeGroup_Sex_22', 'AgeGroup_Sex_23', 'AgeGroup_Sex_24',
-        'AgeGroup_Sex_25', 'AgeGroup_Sex_26', 'AgeGroup_Sex_27', 'AgeGroup_Sex_28'
-    ]
-
-    # Eliminar filas en df_train
-    initial_train_rows = len(df_train)
-    df_train = df_train[~(df_train[age_group_sex_columns] == 0).all(axis=1)]
-    removed_train_rows = initial_train_rows - len(df_train)
-
-    # Eliminar filas en df_test
-    initial_test_rows = len(df_test)
-    df_test = df_test[~(df_test[age_group_sex_columns] == 0).all(axis=1)]
-    removed_test_rows = initial_test_rows - len(df_test)
-
-    # Imprimir el total de filas eliminadas
-    print(f"Total de filas eliminadas en train: {removed_train_rows}")
-    print(f"Total de filas eliminadas en test: {removed_test_rows}")
+    df_train = pd.concat([df_train.reset_index(drop=True), df_train_ohe], axis=1).drop(columns=['Sex'])
+    df_test = pd.concat([df_test.reset_index(drop=True), df_test_ohe], axis=1).drop(columns=['Sex'])
 
     return df_train, df_test
 
@@ -159,10 +132,8 @@ def data_exploration(df_train, df_test):
 
     df_train, df_test = group_size_tranformation(df_train, df_test)
 
-    df_train, df_test = age_group_sex_tranformation(df_train, df_test)
+    df_train, df_test = sex_tranformation(df_train, df_test)
 
     df_train, df_test = drop_last_cols(df_train, df_test)
-
-    df_train, df_test = remove_zero_rows(df_train, df_test)
 
     return df_train, df_test

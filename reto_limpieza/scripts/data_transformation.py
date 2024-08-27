@@ -62,45 +62,6 @@ def group_size_col(df_train, df_test):
 
     return df_train, df_test
 
-
-
-#La función age_group_sex_col crea una columna para evaluar la probabilidad condicional que un tripulante sobreviva dado su grupo de edad y sexo. 
-#Recibe como parámetros el grupo de datos de entrenamiento y testeo
-#Devuelve los conjuntos de datos de pruebas y entrenamiento con la nueva columna agregada
-
-def age_group_sex_col(df_train, df_test):
-    # Dividir en intervalos de 5 la edad de los pasajeros y utilizar tablas de pivote para analizar la supervivencia dependiendo del rango de edad.
-
-    age_bins = [-1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85]
-    age_labels = ['0-4', '5-9', '10-14', '15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79', '80+']
-
-    df_train['AgeGroup'] = pd.cut(df_train['Age'], bins=age_bins, labels=age_labels)
-    df_test['AgeGroup'] = pd.cut(df_test['Age'], bins=age_bins, labels=age_labels)
-
-    # Paso 1: Contar las ocurrencias conjuntas de Group Age y Sex
-    joint_counts = df_train.groupby(['Sex', 'AgeGroup'], observed=False).size().unstack(fill_value=0)
-
-    # Paso 2: Calcular la probabilidad condicional P(Group Age | Sex)
-    conditional_probabilities = joint_counts.div(joint_counts.sum(axis=1), axis=0)
-    #print(conditional_probabilities*100)
-
-    # Generar una columna donde sea el ['AgeGroup'] y el ['Sex'] en una sola columna
-    df_train['AgeGroup_Sex'] = df_train['AgeGroup'].astype(str) + '_' + df_train['Sex']
-    df_test['AgeGroup_Sex'] = df_test['AgeGroup'].astype(str) + '_' + df_test['Sex']
-
-
-
-    # Paso 3: Contar las ocurrencias conjuntas de Sex, Group Age y Survived
-    joint_counts_survived = df_train.groupby(['Sex', 'AgeGroup', 'Survived'], observed=False).size().unstack(fill_value=0)
-
-    # Paso 4: Calcular la probabilidad condicional P(Survived = 1 | Sex, Group Age)
-    survived_counts = joint_counts_survived[1]
-    conditional_probabilities_survived = survived_counts.div(joint_counts_survived.sum(axis=1))
-    #print(conditional_probabilities_survived*100)
-
-    return df_train, df_test
-
-
 #La función ticket_info_col crea 3 columnas nuevas que incluyen información a partir del ticket de cada pasajero
 #Recibe el conjunto de datos de prueba y de testeo
 #Devuelve ambos conjuntos de datos con las columna actualizadas
@@ -158,8 +119,6 @@ def data_transformation(df_train, df_test):
     complete_ages(df_train, df_test)
 
     group_size_col(df_train, df_test)
-
-    age_group_sex_col(df_train, df_test)
 
     ticket_info_col(df_train, df_test)
 
