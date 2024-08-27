@@ -1,7 +1,7 @@
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 
 # Función para realizar un análisis de supervivencia
 def survival_analysis(df_train):
@@ -93,19 +93,13 @@ def embarked_tranformation(df_train, df_test):
     return df_train, df_test
 
 def group_size_tranformation(df_train, df_test):
-    ohe = OneHotEncoder()
+    lbl = LabelEncoder()
 
     # df_train
-    X = ohe.fit_transform(df_train[['Group_Size']].values.reshape(-1, 1)).toarray()
-    dfOneHot = pd.DataFrame(X, columns = ["Group_Size_" + str(int(i)) for i in range(X.shape[1])])
-    df_train = pd.concat([df_train, dfOneHot], axis=1)
-    df_train = df_train.drop(columns=['Group_Size'])
+    df_train['Group_Size'] = lbl.fit_transform(df_train['Group_Size'])
 
     # df_test
-    X = ohe.fit_transform(df_test[['Group_Size']].values.reshape(-1, 1)).toarray()
-    dfOneHot = pd.DataFrame(X, columns = ["Group_Size_" + str(int(i)) for i in range(X.shape[1])])
-    df_test = pd.concat([df_test, dfOneHot], axis=1)
-    df_test = df_test.drop(columns=['Group_Size'])
+    df_test['Group_Size'] = lbl.fit_transform(df_test['Group_Size'])
 
     return df_train, df_test
 
