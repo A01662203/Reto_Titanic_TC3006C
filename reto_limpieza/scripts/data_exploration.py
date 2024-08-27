@@ -1,5 +1,6 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder
 
 # Función para realizar un análisis de supervivencia
 def survival_analysis(df_train):
@@ -68,8 +69,32 @@ def plt_survival_rate(df_train):
 # Función para eliminar las columnas que ya no son necesarias para la parte del modelado
 def drop_last_cols(df_train, df_test):
     # Eliminar las columnas 'Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length' y 'Title' de ambos conjuntos de datos
-    df_train = df_train.drop(columns=['Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length', 'Title'])
-    df_test = df_test.drop(columns=['Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length', 'Title'])
+    df_train = df_train.drop(columns=['Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'Sex', 'Age', 'Fare', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'Parch', 'SibSp'])
+    df_test = df_test.drop(columns=['Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'Sex', 'Age', 'Fare', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'Parch', 'SibSp'])
+
+    return df_train, df_test
+
+def embarked_tranformation(df_train, df_test):
+    # Convertir las columnas 'Embarked' en valores numéricos
+    lbl = LabelEncoder()
+    df_train['Embarked'] = lbl.fit_transform(df_train['Embarked'])
+    df_test['Embarked'] = lbl.fit_transform(df_test['Embarked'])
+
+    return df_train, df_test
+
+def group_size_tranformation(df_train, df_test):
+    # Convertir Alone, Small, Medium y Large en valores numéricos
+    lbl = LabelEncoder()
+    df_train['Group_Size'] = lbl.fit_transform(df_train['Group_Size'])
+    df_test['Group_Size'] = lbl.fit_transform(df_test['Group_Size'])
+
+    return df_train, df_test
+
+def age_group_sex_tranformation(df_train, df_test):
+    # Convertir las columnas 'AgeGroup en valores numéricos
+    lbl = LabelEncoder()
+    df_train['AgeGroup_Sex'] = lbl.fit_transform(df_train['AgeGroup_Sex'])
+    df_test['AgeGroup_Sex'] = lbl.fit_transform(df_test['AgeGroup_Sex'])
 
     return df_train, df_test
 
@@ -82,5 +107,11 @@ def data_exploration(df_train, df_test):
     plt_survival_rate(df_train)
 
     df_train, df_test = drop_last_cols(df_train, df_test)
+
+    df_train, df_test = embarked_tranformation(df_train, df_test)
+
+    df_train, df_test = group_size_tranformation(df_train, df_test)
+
+    df_train, df_test = age_group_sex_tranformation(df_train, df_test)
 
     return df_train, df_test
