@@ -18,8 +18,13 @@ def drop_columns(df_train, df_test):
 def drop_rows(df_train, df_test):
     train_rows = len(df_train)
     test_rows = len(df_test)
+
+    print(train_rows, test_rows)
     df_train = df_train.dropna(subset=['Embarked'])
+
+    # Print the PassengerId of the rows with missing values in 'Fare' column in df_test
     df_test = df_test.dropna(subset=['Fare'])
+    print(len(df_train), len(df_test))
 
     print(f"Instancias eliminadas en df_train: {train_rows - len(df_train)}")
     print(f"Instancias eliminadas en df_test: {test_rows - len(df_test)}")
@@ -30,8 +35,8 @@ def drop_rows(df_train, df_test):
 def data_cleaning(df_train, df_test):
     missing_data(df_train, df_test)
 
-    df_train, df_test = drop_columns(df_train, df_test)
-
     df_train, df_test = drop_rows(df_train, df_test)
+
+    df_train, df_test = drop_columns(df_train, df_test)
 
     return df_train, df_test

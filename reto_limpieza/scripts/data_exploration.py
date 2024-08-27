@@ -78,17 +78,17 @@ def drop_last_cols(df_train, df_test):
 def embarked_tranformation(df_train, df_test):
     ohe = OneHotEncoder()
 
-    # df_train
-    X = ohe.fit_transform(df_train[['Embarked']].values.reshape(-1, 1)).toarray()
-    dfOneHot = pd.DataFrame(X, columns = ["Embarked_" + str(int(i)) for i in range(X.shape[1])])
-    df_train = pd.concat([df_train, dfOneHot], axis=1)
-    df_train = df_train.drop(columns=['Embarked'])
+    # Fit on df_train and transform both df_train and df_test
+    X_train = ohe.fit_transform(df_train[['Embarked']]).toarray()
+    X_test = ohe.transform(df_test[['Embarked']]).toarray()
 
-    # df_test
-    X = ohe.fit_transform(df_test[['Embarked']].values.reshape(-1, 1)).toarray()
-    dfOneHot = pd.DataFrame(X, columns = ["Embarked_" + str(int(i)) for i in range(X.shape[1])])
-    df_test = pd.concat([df_test, dfOneHot], axis=1)
-    df_test = df_test.drop(columns=['Embarked'])
+    # Create DataFrames for the transformed data
+    df_train_ohe = pd.DataFrame(X_train, columns=["Embarked_" + str(i) for i in range(X_train.shape[1])])
+    df_test_ohe = pd.DataFrame(X_test, columns=["Embarked_" + str(i) for i in range(X_test.shape[1])])
+
+    # Concatenate the one-hot encoded columns back to the original DataFrames
+    df_train = pd.concat([df_train.reset_index(drop=True), df_train_ohe], axis=1).drop(columns=['Embarked'])
+    df_test = pd.concat([df_test.reset_index(drop=True), df_test_ohe], axis=1).drop(columns=['Embarked'])
 
     return df_train, df_test
 
@@ -104,19 +104,19 @@ def group_size_tranformation(df_train, df_test):
     return df_train, df_test
 
 def age_group_sex_tranformation(df_train, df_test):
-    ohe = OneHotEncoder()
+    ohe = OneHotEncoder(handle_unknown='ignore')
 
-    # df_train
-    X = ohe.fit_transform(df_train[['AgeGroup_Sex']].values.reshape(-1, 1)).toarray()
-    dfOneHot = pd.DataFrame(X, columns = ["AgeGroup_Sex_" + str(int(i)) for i in range(X.shape[1])])
-    df_train = pd.concat([df_train, dfOneHot], axis=1)
-    df_train = df_train.drop(columns=['AgeGroup_Sex'])
+    # Fit on df_train and transform both df_train and df_test
+    X_train = ohe.fit_transform(df_train[['AgeGroup_Sex']]).toarray()
+    X_test = ohe.transform(df_test[['AgeGroup_Sex']]).toarray()
 
-    # df_test
-    X = ohe.fit_transform(df_test[['AgeGroup_Sex']].values.reshape(-1, 1)).toarray()
-    dfOneHot = pd.DataFrame(X, columns = ["AgeGroup_Sex_" + str(int(i)) for i in range(X.shape[1])])
-    df_test = pd.concat([df_test, dfOneHot], axis=1)
-    df_test = df_test.drop(columns=['AgeGroup_Sex'])
+    # Create DataFrames for the transformed data
+    df_train_ohe = pd.DataFrame(X_train, columns=["AgeGroup_Sex_" + str(i) for i in range(X_train.shape[1])])
+    df_test_ohe = pd.DataFrame(X_test, columns=["AgeGroup_Sex_" + str(i) for i in range(X_test.shape[1])])
+
+    # Concatenate the one-hot encoded columns back to the original DataFrames
+    df_train = pd.concat([df_train.reset_index(drop=True), df_train_ohe], axis=1).drop(columns=['AgeGroup_Sex'])
+    df_test = pd.concat([df_test.reset_index(drop=True), df_test_ohe], axis=1).drop(columns=['AgeGroup_Sex'])
 
     return df_train, df_test
 
@@ -124,16 +124,16 @@ def age_group_sex_tranformation(df_train, df_test):
 def data_exploration(df_train, df_test):
     survival_analysis(df_train)
 
-    plt_group_size(df_train)
+    # plt_group_size(df_train)
 
-    plt_survival_rate(df_train)
-
-    df_train, df_test = drop_last_cols(df_train, df_test)
+    # plt_survival_rate(df_train)
 
     df_train, df_test = embarked_tranformation(df_train, df_test)
 
     df_train, df_test = group_size_tranformation(df_train, df_test)
 
     df_train, df_test = age_group_sex_tranformation(df_train, df_test)
+
+    df_train, df_test = drop_last_cols(df_train, df_test)
 
     return df_train, df_test
