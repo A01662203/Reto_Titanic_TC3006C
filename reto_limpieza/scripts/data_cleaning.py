@@ -8,10 +8,10 @@ def missing_data(df_train, df_test):
     missing_values_test = df_test.isnull().mean() * 100
     print(missing_values_test)
 
-# Eliminar las columnas 'PassengerId' y 'Cabin' de ambos conjuntos de datos
+# Eliminar las columnas 'Cabin' de ambos conjuntos de datos
 def drop_columns(df_train, df_test):
-    df_train = df_train.drop(columns=['PassengerId', 'Cabin'])
-    df_test = df_test.drop(columns=['PassengerId', 'Cabin'])
+    df_train = df_train.drop(columns=['Cabin'])
+    df_test = df_test.drop(columns=['Cabin'])
     return df_train, df_test
 
 # Eliminar las filas con valores faltantes en las columnas 'Embarked' y 'Fare'

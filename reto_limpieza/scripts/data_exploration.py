@@ -1,6 +1,7 @@
 import seaborn as sns
+import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
 
 # Función para realizar un análisis de supervivencia
 def survival_analysis(df_train):
@@ -40,7 +41,7 @@ def plt_group_size(df_train):
 # Función para graficar la tasa de supervivencia por características de los pasajeros
 def plt_survival_rate(df_train):
     # Hacer una gráfica de barras para cada columna en los datos de entrenaminto como índice de la tabla pivote ordenada por la tasa de supervivencia
-    df_train_analisis = df_train.drop(columns=['Name', 'Age', 'Survived', 'Fare', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'AgeGroup', 'Group_Size', 'Ticket', 'Title', 'Ticket_Number', 'Ticket_Length'])
+    df_train_analisis = df_train.drop(columns=['PassengerId', 'Name', 'Age', 'Survived', 'Fare', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'AgeGroup', 'Group_Size', 'Ticket', 'Title', 'Ticket_Number', 'Ticket_Length'])
     fig, axs = plt.subplots(2, 3, figsize=(15, 10))
     fig.suptitle('Survival Rate characteristics of Male passengers')
 
@@ -75,26 +76,53 @@ def drop_last_cols(df_train, df_test):
     return df_train, df_test
 
 def embarked_tranformation(df_train, df_test):
-    # Convertir las columnas 'Embarked' en valores numéricos
-    lbl = LabelEncoder()
-    df_train['Embarked'] = lbl.fit_transform(df_train['Embarked'])
-    df_test['Embarked'] = lbl.fit_transform(df_test['Embarked'])
+    ohe = OneHotEncoder()
+
+    # df_train
+    X = ohe.fit_transform(df_train[['Embarked']].values.reshape(-1, 1)).toarray()
+    dfOneHot = pd.DataFrame(X, columns = ["Embarked_" + str(int(i)) for i in range(X.shape[1])])
+    df_train = pd.concat([df_train, dfOneHot], axis=1)
+    df_train = df_train.drop(columns=['Embarked'])
+
+    # df_test
+    X = ohe.fit_transform(df_test[['Embarked']].values.reshape(-1, 1)).toarray()
+    dfOneHot = pd.DataFrame(X, columns = ["Embarked_" + str(int(i)) for i in range(X.shape[1])])
+    df_test = pd.concat([df_test, dfOneHot], axis=1)
+    df_test = df_test.drop(columns=['Embarked'])
 
     return df_train, df_test
 
 def group_size_tranformation(df_train, df_test):
-    # Convertir Alone, Small, Medium y Large en valores numéricos
-    lbl = LabelEncoder()
-    df_train['Group_Size'] = lbl.fit_transform(df_train['Group_Size'])
-    df_test['Group_Size'] = lbl.fit_transform(df_test['Group_Size'])
+    ohe = OneHotEncoder()
+
+    # df_train
+    X = ohe.fit_transform(df_train[['Group_Size']].values.reshape(-1, 1)).toarray()
+    dfOneHot = pd.DataFrame(X, columns = ["Group_Size_" + str(int(i)) for i in range(X.shape[1])])
+    df_train = pd.concat([df_train, dfOneHot], axis=1)
+    df_train = df_train.drop(columns=['Group_Size'])
+
+    # df_test
+    X = ohe.fit_transform(df_test[['Group_Size']].values.reshape(-1, 1)).toarray()
+    dfOneHot = pd.DataFrame(X, columns = ["Group_Size_" + str(int(i)) for i in range(X.shape[1])])
+    df_test = pd.concat([df_test, dfOneHot], axis=1)
+    df_test = df_test.drop(columns=['Group_Size'])
 
     return df_train, df_test
 
 def age_group_sex_tranformation(df_train, df_test):
-    # Convertir las columnas 'AgeGroup en valores numéricos
-    lbl = LabelEncoder()
-    df_train['AgeGroup_Sex'] = lbl.fit_transform(df_train['AgeGroup_Sex'])
-    df_test['AgeGroup_Sex'] = lbl.fit_transform(df_test['AgeGroup_Sex'])
+    ohe = OneHotEncoder()
+
+    # df_train
+    X = ohe.fit_transform(df_train[['AgeGroup_Sex']].values.reshape(-1, 1)).toarray()
+    dfOneHot = pd.DataFrame(X, columns = ["AgeGroup_Sex_" + str(int(i)) for i in range(X.shape[1])])
+    df_train = pd.concat([df_train, dfOneHot], axis=1)
+    df_train = df_train.drop(columns=['AgeGroup_Sex'])
+
+    # df_test
+    X = ohe.fit_transform(df_test[['AgeGroup_Sex']].values.reshape(-1, 1)).toarray()
+    dfOneHot = pd.DataFrame(X, columns = ["AgeGroup_Sex_" + str(int(i)) for i in range(X.shape[1])])
+    df_test = pd.concat([df_test, dfOneHot], axis=1)
+    df_test = df_test.drop(columns=['AgeGroup_Sex'])
 
     return df_train, df_test
 
