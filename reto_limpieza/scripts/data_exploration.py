@@ -114,7 +114,7 @@ def sex_tranformation(df_train, df_test):
     X_test = ohe.transform(df_test[['Sex']]).toarray()
 
     # Asignar nombres personalizados a las columnas
-    column_names = ohe.categories_[0]  # Obtiene las categorías originales: ['female', 'male']
+    column_names = ['Female', 'Male']
 
     # Create DataFrames for the transformed data with custom column names
     df_train_ohe = pd.DataFrame(X_train, columns=column_names)
