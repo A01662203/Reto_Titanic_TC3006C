@@ -87,9 +87,12 @@ def embarked_tranformation(df_train, df_test):
     X_train = ohe.fit_transform(df_train[['Embarked']]).toarray()
     X_test = ohe.transform(df_test[['Embarked']]).toarray()
 
-    # Create DataFrames for the transformed data
-    df_train_ohe = pd.DataFrame(X_train, columns=["Embarked_" + str(i) for i in range(X_train.shape[1])])
-    df_test_ohe = pd.DataFrame(X_test, columns=["Embarked_" + str(i) for i in range(X_test.shape[1])])
+    # Asignar nombres personalizados a las columnas
+    column_names = ["Embarked_Cherbourg", "Embarked_Queenstown", "Embarked_Southampton"]
+
+    # Create DataFrames for the transformed data with custom column names
+    df_train_ohe = pd.DataFrame(X_train, columns=column_names)
+    df_test_ohe = pd.DataFrame(X_test, columns=column_names)
 
     # Concatenate the one-hot encoded columns back to the original DataFrames
     df_train = pd.concat([df_train.reset_index(drop=True), df_train_ohe], axis=1).drop(columns=['Embarked'])
@@ -115,9 +118,12 @@ def sex_tranformation(df_train, df_test):
     X_train = ohe.fit_transform(df_train[['Sex']]).toarray()
     X_test = ohe.transform(df_test[['Sex']]).toarray()
 
-    # Create DataFrames for the transformed data
-    df_train_ohe = pd.DataFrame(X_train, columns=["Sex_" + str(i) for i in range(X_train.shape[1])])
-    df_test_ohe = pd.DataFrame(X_test, columns=["Sex_" + str(i) for i in range(X_test.shape[1])])
+    # Asignar nombres personalizados a las columnas
+    column_names = ['Female', 'Male']
+
+    # Create DataFrames for the transformed data with custom column names
+    df_train_ohe = pd.DataFrame(X_train, columns=column_names)
+    df_test_ohe = pd.DataFrame(X_test, columns=column_names)
 
     # Concatenate the one-hot encoded columns back to the original DataFrames
     df_train = pd.concat([df_train.reset_index(drop=True), df_train_ohe], axis=1).drop(columns=['Sex'])

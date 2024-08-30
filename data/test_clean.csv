@@ -1,4 +1,4 @@
-PassengerId,Pclass,Age,Fare,Group_Size,Embarked_0,Embarked_1,Embarked_2,Sex_0,Sex_1
+PassengerId,Pclass,Age,Fare,Group_Size,Embarked_Cherbourg,Embarked_Queenstown,Embarked_Southampton,Female,Male
 892,3,34.0,7.8292,0,0.0,1.0,0.0,0.0,1.0
 893,3,47.0,7.0,3,0.0,0.0,1.0,1.0,0.0
 894,2,62.0,9.6875,0,0.0,1.0,0.0,0.0,1.0
