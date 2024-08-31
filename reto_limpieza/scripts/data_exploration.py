@@ -101,13 +101,22 @@ def embarked_tranformation(df_train, df_test):
     return df_train, df_test
 
 def group_size_tranformation(df_train, df_test):
-    lbl = LabelEncoder()
+    ohe = OneHotEncoder()
 
-    # df_train
-    df_train['Group_Size'] = lbl.fit_transform(df_train['Group_Size'])
+    # Fit on df_train and transform both df_train and df_test
+    X_train = ohe.fit_transform(df_train[['Group_Size']]).toarray()
+    X_test = ohe.transform(df_test[['Group_Size']]).toarray()
 
-    # df_test
-    df_test['Group_Size'] = lbl.fit_transform(df_test['Group_Size'])
+    # Asignar nombres personalizados a las columnas
+    column_names = ['Alone', 'Large', 'Medium', 'Small']
+
+    # Create DataFrames for the transformed data with custom column names
+    df_train_ohe = pd.DataFrame(X_train, columns=column_names)
+    df_test_ohe = pd.DataFrame(X_test, columns=column_names)
+
+    # Concatenate the one-hot encoded columns back to the original DataFrames
+    df_train = pd.concat([df_train.reset_index(drop=True), df_train_ohe], axis=1).drop(columns=['Group_Size'])
+    df_test = pd.concat([df_test.reset_index(drop=True), df_test_ohe], axis=1).drop(columns=['Group_Size'])
 
     return df_train, df_test
 
