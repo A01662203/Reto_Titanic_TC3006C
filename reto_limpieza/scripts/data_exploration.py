@@ -70,8 +70,13 @@ def plt_survival_rate(df_train):
 # Función para eliminar las columnas que ya no son necesarias para la parte del modelado
 def drop_last_cols(df_train, df_test):
     # Eliminar las columnas 'Ticket', 'AgeGroup', 'Ticket_Number', 'Ticket_Length' y 'Title' de ambos conjuntos de datos
-    df_train = df_train.drop(columns=['Ticket', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'Parch', 'SibSp'])
-    df_test = df_test.drop(columns=['Ticket', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'Parch', 'SibSp'])
+    # df_train = df_train.drop(columns=['Ticket', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'Parch', 'SibSp'])
+    # df_train = df_train.drop(columns=['Ticket', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'Group_Size'])
+    df_train = df_train.drop(columns=['Ticket', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'TicketPrefix', 'Ticket_Group', 'Parch', 'SibSp'])
+    ###############################################
+    df_test = df_test.drop(columns=['Ticket', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'TicketPrefix', 'Ticket_Group', 'Parch', 'SibSp'])
+    # df_test = df_test.drop(columns=['Ticket', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'Parch', 'SibSp'])
+    # df_test = df_test.drop(columns=['Ticket', 'Ticket_Number', 'Ticket_Length', 'Title', 'Name', 'TicketPrefix', 'Ticket_FirstDigit', 'Ticket_Group', 'Group_Size'])
 
     return df_train, df_test
 
