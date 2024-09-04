@@ -1,0 +1,11 @@
+# Pendientes reto:
+- Transformación de notebooks de modelos a .py
+- Corregir feedback de segunda entrega.
+- Organización del repositorio con carpetas y subcarpetas. 
+- Categorización de edades con decision tree. √
+- División de mayor de edad y menor de edad.
+- Graficar la pérdida de cada GridSearch para ver cómo baja.
+
+
+# Posibles implementaciones:
+- Clusterización con no supervisado (K-Means)
