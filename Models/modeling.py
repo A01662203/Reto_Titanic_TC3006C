@@ -7,16 +7,16 @@ def modeling():
     df_train, df_test = data_loading('./data/test_clean.csv', './data/train_clean.csv')
 
     y_train = df_train['Survived']
-    x_train = df_train.drop(columns=['Survived'])
+    X_train = df_train.drop(columns=['Survived'])
     y_test = df_test['Survived']
-    x_test = df_test.drop(columns=['Survived'])
+    X_test = df_test.drop(columns=['Survived'])
 
     # MODELO 1: Regresión Logística
 
     # MODELO 2: Random Forest
-    random_forest(x_train, y_train, x_test, y_test)
+    # random_forest(X_train, y_train, X_test, y_test)
 
     # MODELO 3: Neural Network
-    neural_network(x_train, y_train, x_test, y_test)
+    neural_network(X_train, y_train, X_test, y_test)
     
     return 0
