@@ -4,7 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import GridSearchCV
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import confusion_matrix
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -12,15 +12,6 @@ warnings.filterwarnings('ignore')
 train = pd.read_csv('./data/train_clean.csv')
 # Load test data
 test = pd.read_csv('./data/test_clean.csv')
-# Load test results
-test_results = pd.read_csv('./data/gender_submission.csv')
-
-# Merge test results with test data where PassengerId is the same
-test = pd.merge(test, test_results, on='PassengerId')
-
-# Drop 'PassengerId'
-train.drop('PassengerId', axis=1, inplace=True)
-test.drop('PassengerId', axis=1, inplace=True)
 
 # Drop the columns that are not needed in the train dataset
 x_train = train.drop('Survived', axis=1)
