@@ -4,7 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import GridSearchCV
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, precision_score
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -23,24 +23,24 @@ y_test = test['Survived']
 
 # Use GridSearchCV to find best parameters
 param_grid = {
-    'C': np.logspace(-3,3,7),
-    'solver': ['liblinear', 'newton-cg', 'lbfgs', 'sag', 'saga']
+    'C': [0.001, 0.01, 0.1, 1., 10.],
+    'penalty': ['l1', 'l2']
 }
-grid_search = GridSearchCV(LogisticRegression(), param_grid, cv=10)
+grid_search = GridSearchCV(LogisticRegression(class_weight='balanced', solver='liblinear'), param_grid, cv=5, scoring='precision')
 grid_search.fit(x_train, y_train)
 print(f'Best parameters: {grid_search.best_params_}')
-print(f'Best score: {grid_search.best_score_}')
 
 # Predict with best parameters
 y_pred = grid_search.predict(x_test)
-accuracy = grid_search.score(x_test, y_test)
-print(f'Accuracy: {accuracy.round(2)*100}%')
+precision = grid_search.score(x_test, y_test)
+print(f'Precision: {precision.round(2)*100}%')
+
 
 # Confusion Matrix plot
 confusion_matrix_2 = confusion_matrix(y_test, y_pred)
 
 # Plot the confusion matrix
 sns.heatmap(confusion_matrix_2, annot=True, fmt='d')
-plt.xlabel('Predicted')
+plt.xlabel('Predicción')
 plt.ylabel('Actual')
 plt.show()
