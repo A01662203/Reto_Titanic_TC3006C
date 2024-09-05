@@ -166,3 +166,16 @@ def data_exploration(df_train, df_test):
     df_test = merge_test_survival(df_test)
 
     return df_train, df_test
+    return df_train, df_test
+
+
+#Funcion que crea nueva columna en base al rango de edad en hombres.
+def create_MaleAge(df_train, df_test):
+    df_train['FemaleAge2'] = ((df_train['Female'] == 1) & (df_train['Age'] <= 2.5)).astype(int)
+    df_train['MaleAge6'] = ((df_train['Male'] == 1) & (df_train['Age'] <= 6.5)).astype(int)
+    #train.to_csv('train_FM_Age.csv')
+
+    df_test['FemaleAge2'] = ((df_test['Female'] == 1) & (df_test['Age'] <= 2.5)).astype(int)
+    df_test['MaleAge6'] = ((df_test['Male'] == 1) & (df_test['Age'] <= 6.5)).astype(int)
+    #test.to_csv('test_FM_Age.csv')
+    return df_train, df_test
