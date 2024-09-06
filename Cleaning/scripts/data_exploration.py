@@ -1,5 +1,5 @@
-import seaborn as sns
 import pandas as pd
+import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 
@@ -158,6 +158,19 @@ def create_FemaleAge(df_train, df_test):
     #test.to_csv('test_FM_Age.csv')
     return df_train, df_test
 
+def pclass_transformation(df_train, df_test):
+    train_encoded = pd.get_dummies(df_train, columns=['Pclass'])
+    bool_cols = train_encoded.select_dtypes(include='bool').columns
+    train_encoded[bool_cols] = train_encoded[bool_cols].astype(int)
+    df_train = train_encoded
+
+    test_encoded = pd.get_dummies(df_test, columns=['Pclass'])
+    bool_cols = test_encoded.select_dtypes(include='bool').columns
+    test_encoded[bool_cols] = test_encoded[bool_cols].astype(int)
+    df_test = test_encoded
+    
+    return df_train, df_test
+
 # Función para realizar la exploración de los datos, que incluye análisis, gráficas y eliminación de columnas innecesarias para el modelado
 def data_exploration(df_train, df_test):
     survival_analysis(df_train)
@@ -176,6 +189,8 @@ def data_exploration(df_train, df_test):
 
     df_test = merge_test_survival(df_test)
 
-    df_train, df_test = create_FemaleAge(df_train, df_test)
+    df_train, df_test = pclass_transformation(df_train, df_test)
+
+    #df_train, df_test = create_FemaleAge(df_train, df_test)
 
     return df_train, df_test
