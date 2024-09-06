@@ -191,6 +191,6 @@ def data_exploration(df_train, df_test):
 
     df_train, df_test = pclass_transformation(df_train, df_test)
 
-    #df_train, df_test = create_FemaleAge(df_train, df_test)
+    df_train, df_test = create_FemaleAge(df_train, df_test)
 
     return df_train, df_test

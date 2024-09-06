@@ -7,8 +7,8 @@ def main():
     # df_train, df_test = cleaning()
 
     # Generar un archivo csv con los datos limpios
-    # df_train.to_csv('./data/train_clean_sexTransform.csv', index=False)
-    # df_test.to_csv('./data/test_clean_sexTransform.csv', index=False)
+    # df_train.to_csv('./data/train/train_clean.csv', index=False)
+    # df_test.to_csv('./data/test/test_clean.csv', index=False)
 
     # Decision Tree
     # decTree(df_train)
