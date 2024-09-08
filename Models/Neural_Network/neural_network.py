@@ -2,6 +2,8 @@ from tensorflow.keras import Input
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.optimizers import Adam, RMSprop
+from tensorflow.keras.metrics import Precision
+from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score
 import matplotlib.pyplot as plt
 import numpy as np
@@ -20,7 +22,7 @@ def create_model(input_shape, dropout_rate=0.0, learning_rate=0.001, optimizer='
     elif optimizer == 'rmsprop':
         opt = RMSprop(learning_rate=learning_rate)
     
-    model.compile(optimizer=opt, loss='binary_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer=opt, loss='binary_crossentropy', metrics=[Precision()])
     return model
 
 def hyperparameter_tuning(X_train, y_train, X_test, y_test):
@@ -35,14 +37,27 @@ def hyperparameter_tuning(X_train, y_train, X_test, y_test):
     best_score = -np.inf
     best_params = {}
 
+    # Definimos EarlyStopping para que detenga el entrenamiento si no mejora la métrica 'val_precision'
+    early_stopping = EarlyStopping(monitor='val_precision', patience=5, restore_best_weights=True)
+
     for dropout_rate in param_grid['dropout_rate']:
         for learning_rate in param_grid['learning_rate']:
             for optimizer in param_grid['optimizer']:
                 for batch_size in param_grid['batch_size']:
                     for epochs in param_grid['epochs']:
                         model = create_model(X_train.shape[1:], dropout_rate, learning_rate, optimizer)
-                        model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=0)
-                        score = model.evaluate(X_test, y_test, verbose=0)[1]
+                        
+                        # Entrenamos el modelo con EarlyStopping y validación en un 20% del training set
+                        model.fit(
+                            X_train, y_train, 
+                            epochs=epochs, 
+                            batch_size=batch_size, 
+                            validation_split=0.2,  # Usamos una parte de X_train para validación
+                            callbacks=[early_stopping],
+                            verbose=0
+                        )
+
+                        score = model.evaluate(X_test, y_test, verbose=0)[1]  # Evaluamos la métrica de precision en el set de test
 
                         if score > best_score:
                             best_score = score

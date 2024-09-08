@@ -4,19 +4,19 @@ from Models.Random_Forest.random_forest import random_forest
 
 def modeling():
     # Cargar los dataframes de sus respectivos archivos csv
-    df_train, df_test = data_loading('./data/test_clean.csv', './data/train_clean.csv')
+    df_train, df_test = data_loading('./data/test_clean_sexTransform.csv', './data/train_clean_sexTransform.csv')
 
     y_train = df_train['Survived']
-    X_train = df_train.drop(columns=['Survived'])
+    X_train = df_train.drop(columns=['Survived','PassengerId'])
     y_test = df_test['Survived']
-    X_test = df_test.drop(columns=['Survived'])
+    X_test = df_test.drop(columns=['Survived','PassengerId'])
 
     # MODELO 1: Regresión Logística
 
     # MODELO 2: Random Forest
-    # random_forest(X_train, y_train, X_test, y_test)
+    random_forest(X_train, y_train, X_test, y_test)
 
     # MODELO 3: Neural Network
-    neural_network(X_train, y_train, X_test, y_test)
+    #neural_network(X_train, y_train, X_test, y_test)
     
     return 0

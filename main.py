@@ -1,6 +1,6 @@
 from Cleaning.cleaning import cleaning
 from Models.modeling import modeling
-from decTree import decTree
+# from decTree import decTree
 
 def main():
     # PARTE 1: Limpieza de los datos
