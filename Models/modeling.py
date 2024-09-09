@@ -4,7 +4,7 @@ from Models.Random_Forest.random_forest import random_forest
 
 def modeling():
     # Cargar los dataframes de sus respectivos archivos csv
-    df_train, df_test = data_loading('./data/test_clean.csv', './data/train_clean.csv')
+    df_train, df_test = data_loading('./data/test/test_clean.csv', './data/train/train_clean.csv')
 
     y_train = df_train['Survived']
     X_train = df_train.drop(columns=['Survived'])

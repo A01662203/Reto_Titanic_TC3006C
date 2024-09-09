@@ -6,10 +6,9 @@ from sklearn.metrics import accuracy_score, confusion_matrix, precision_score
 import matplotlib.pyplot as plt
 import numpy as np
 
-def create_model(input_shape, dropout_rate=0.0, learning_rate=0.001, optimizer='adam'):
+def create_model(X_train, dropout_rate=0.0, learning_rate=0.001, optimizer='adam'):
     model = Sequential()
-    model.add(Input(shape=input_shape))
-    model.add(Dense(16, activation='relu'))
+    model.add(Dense(16, input_dim=X_train.shape[1], activation='relu'))
     model.add(Dense(16, activation='relu'))
     if dropout_rate > 0.0:
         model.add(Dropout(dropout_rate))
@@ -24,6 +23,7 @@ def create_model(input_shape, dropout_rate=0.0, learning_rate=0.001, optimizer='
     return model
 
 def hyperparameter_tuning(X_train, y_train, X_test, y_test):
+    # Definir los hiperparámetros a explorar
     param_grid = {
         'dropout_rate': [0.0, 0.2],
         'learning_rate': [0.001, 0.01],
@@ -31,7 +31,8 @@ def hyperparameter_tuning(X_train, y_train, X_test, y_test):
         'batch_size': [20, 50],
         'epochs': [50, 100]
     }
-    
+
+    # Realizar la búsqueda manual de hiperparámetros
     best_score = -np.inf
     best_params = {}
 
@@ -40,9 +41,11 @@ def hyperparameter_tuning(X_train, y_train, X_test, y_test):
             for optimizer in param_grid['optimizer']:
                 for batch_size in param_grid['batch_size']:
                     for epochs in param_grid['epochs']:
-                        model = create_model(X_train.shape[1:], dropout_rate, learning_rate, optimizer)
+                        model = create_model(X_train, dropout_rate=dropout_rate,
+                                            learning_rate=learning_rate,
+                                            optimizer=optimizer)
                         model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=0)
-                        score = model.evaluate(X_test, y_test, verbose=0)[1]
+                        score = model.evaluate(X_test, y_test, verbose=0)[1]  # [1] es para la precisión
 
                         if score > best_score:
                             best_score = score
@@ -79,7 +82,7 @@ def neural_network(X_train, y_train, X_test, y_test):
     print(f"Mejor accuracy: {best_score}")
     print(f"Mejores hiperparámetros: {best_params}")
 
-    best_model = create_model(X_train.shape[1:], best_params['dropout_rate'], best_params['learning_rate'], best_params['optimizer'])
+    best_model = create_model(X_train, best_params['dropout_rate'], best_params['learning_rate'], best_params['optimizer'])
 
     best_model.fit(X_train, y_train, epochs=best_params['epochs'], batch_size=best_params['batch_size'], verbose=1)
 
