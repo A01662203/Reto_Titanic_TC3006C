@@ -6,6 +6,33 @@ El conjunto de datos utilizado en este proyecto es proporcionado por Kaggle y co
 
 En este proyecto, se construirá un modelo predictivo para estimar la supervivencia de los pasajeros en el Titanic. A través de la exploración de datos, la ingeniería de características y la evaluación del modelo, se identificarán factores clave que influyeron en la supervivencia, como la clase del pasajero, el género y la edad. Esto se logrará uniendo conocimientos de probabilidad estadística, machine learning, uso de librerías de python, entre otros.
 
+# Visualización solución
+
+
+Para visualizar correctamente el modelo seleccionado y con el dataset correcto, sigue estos pasos:
+
+1. **Clona el repositorio**:
+   ```bash
+   git clone https://github.com/A01662203/Reto_Titanic_TC3006C_Equipo1.git
+   ```
+2. **Navega al directorio del proyecto**:
+   ```bash
+   cd Reto_Titanic_TC3006C_Equipo1
+   ```
+3. **Instala las dependencias**:
+   Asegúrate de tener instaladas todas las bibliotecas necesarias.
+   
+4. **Ejecuta el script principal**:
+   Ejecuta el archivo `main.py` para iniciar el modelo y visualizar los resultados.
+   ```bash
+   python main.py
+   ```
+
+# Informe del Proyecto
+
+Para acceder al informe con el detalle de todo el procedimiento llevado a cabo para la solución del problema, puedes consultar el siguiente enlace: [Informe del Proyecto](https://github.com/A01662203/Reto_Titanic_TC3006C_Equipo1/blob/main/Reporte_Titanic.pdf).
+
+
 
 ## Equipo
 <div align="center">
