@@ -31,7 +31,7 @@ Para visualizar correctamente el modelo seleccionado y con el dataset correcto, 
 # Informe del Proyecto
 
 Para acceder al informe con el detalle de todo el procedimiento llevado a cabo para la solución del problema, puedes consultar el siguiente enlace: [Informe del Proyecto](https://github.com/A01662203/Reto_Titanic_TC3006C_Equipo1/blob/main/Reporte_Titanic.pdf).
-```
+
 
 
 ## Equipo
